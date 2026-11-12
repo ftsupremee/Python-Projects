@@ -81,7 +81,7 @@ def main():
     options = "\n".join(options) # Making it a string so it's easier. \n joins it to make new lines after every option
 
     while True:
-        tasks = load_tasks(path=path)
+        tasks = load_tasks(path = path)
         choice = int(input(f"\n{options}\nChoose what to do: "))
 
         # Allow only valid choices
