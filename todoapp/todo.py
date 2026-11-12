@@ -15,12 +15,16 @@ def save_tasks(tasks: list, path: str="tasks.txt"):
         for task in tasks:
             f.write(task + "\n")
     
-def add_task(task: str, tasks: list):
+def add_task(tasks: list):
+    task = input("Enter task you want to add: ")
     tasks.append(task)
     print("\nUpdated!")
     show_tasks(tasks)
 
-def remove_task(task_number: int, tasks: list):
+def remove_task(tasks: list):
+    show_tasks(tasks)
+    task_number = int(input("Please enter the index of the task: "))
+
     if len(tasks) == 0:
         print("No tasks to remove")
     try:
@@ -32,12 +36,7 @@ def remove_task(task_number: int, tasks: list):
         print("Task not in tasks.")
         sleep(1)
 
-def clear_tasks(tasks: list):
-    tasks = [] # Setting a list to empty just removes all the tasks inside, clearing it
-    show_tasks(tasks)
-
 def show_tasks(tasks: list):
-    # showing tasks everytime one is added or removed improves the experience imo so I implemented it into this
     if len(tasks) > 0: # If there are no tasks it's awkward so I made a thing for a special case
         print("Your tasks are:")
         for task in tasks:
@@ -46,7 +45,24 @@ def show_tasks(tasks: list):
         sleep(1)
     else:
         print("You have no tasks")
-    save_tasks(tasks)
+    save_tasks(tasks) # as show_tasks() is called in basically every choice
+
+def clear_tasks(tasks: list):
+    tasks = [] # Setting a list to empty just removes all the tasks inside, clearing it
+    show_tasks(tasks)
+
+def update_task(tasks: list):
+    show_tasks(tasks)
+    task_number = int(input("Please enter the index of the task: "))
+    task = input("Enter what to update it as: ")
+
+    if len(tasks) == 0:
+        print("No tasks to edit")
+        return
+    tasks[task_number - 1] = task
+    show_tasks(tasks)
+
+
 
 def main():
     print("----------------------------------------")
@@ -55,7 +71,7 @@ def main():
     path = "tasks.txt"
     tasks = load_tasks(path=path)
 
-    options = ["1.Add a Task", "2.Complete a Task", "3.Show your tasks", "4.Clear all tasks", "5.Quit"]
+    options = ["1.Add a Task", "2.Complete a Task", "3.Show your tasks", "4.Clear all tasks", "5.Edit Task", "6.Quit"]
     choices_count = len(options)
     options = "\n".join(options) # Making it a string so it's easier. \n joins it to make new lines after every option
 
@@ -69,16 +85,15 @@ def main():
 
         match choice:
             case 1:
-                task = input("Please enter the title of the task: ")
-                add_task(task, tasks)
+                add_task(tasks)
             case 2:
-                show_tasks(tasks)
-                task_number = int(input("Please enter the index of the task: "))
-                remove_task(task_number, tasks)
+                remove_task(tasks)
             case 3:
                 show_tasks(tasks)
             case 4:
                 clear_tasks(tasks)
+            case 5:
+                update_task(tasks)
             case _:
                 print("Thank you for using todo list")
                 break
