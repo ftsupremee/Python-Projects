@@ -76,7 +76,7 @@ def main():
     options = "\n".join(options) # Making it a string so it's easier. \n joins it to make new lines after every option
 
     while True:
-        choice = int(input(f"\n{options}Choose what to do: "))
+        choice = int(input(f"\n{options}\nChoose what to do: "))
 
         # Allow only valid choices
         if not (1 <= choice <= choices_count):
