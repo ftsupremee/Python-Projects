@@ -1,7 +1,7 @@
 from time import sleep
 
 # memory with a file with all the tasks that gets loaded every start
-def load_tasks(path="tasks.txt"):
+def load_tasks(path: str="tasks.txt"):
     try:
         with open(path, "r") as f:
             tasks = [line.strip() for line in f if line.strip()]
@@ -12,6 +12,8 @@ def load_tasks(path="tasks.txt"):
 # save the tasks to the file, rewriting everything
 def save_tasks(tasks: list, path: str="tasks.txt"):
     with open(path, "w") as f:
+        if len(tasks) == 0:
+            return
         for task in tasks:
             f.write(task + "\n")
     
@@ -31,9 +33,9 @@ def remove_task(tasks: list):
         tasks.pop(task_number - 1)
         print("Updated!")
         show_tasks(tasks)
-    except ValueError:
-        # remove raises a ValueError if the element isn't in the given list
-        print("Task not in tasks.")
+    except IndexError:
+        # pop raises a IndexError if the element index isn't in the list
+        print("Task index not in tasks.")
         sleep(1)
 
 def show_tasks(tasks: list):
@@ -58,7 +60,11 @@ def update_task(tasks: list):
     if len(tasks) == 0:
         print("No tasks to edit")
         return
-    tasks[task_number - 1] = task
+    
+    try:
+        tasks[task_number - 1] = task
+    except IndexError:
+        print("Index out of range")
     show_tasks(tasks)
 
 
@@ -68,13 +74,14 @@ def main():
     print("               TODO LIST                ")
     print("----------------------------------------")
     path = "tasks.txt"
-    tasks = load_tasks(path=path)
+   
 
     options = ["1.Add a Task", "2.Complete a Task", "3.Show your tasks", "4.Clear all tasks", "5.Edit Task", "6.Quit"]
     choices_count = len(options)
     options = "\n".join(options) # Making it a string so it's easier. \n joins it to make new lines after every option
 
     while True:
+        tasks = load_tasks(path=path)
         choice = int(input(f"\n{options}\nChoose what to do: "))
 
         # Allow only valid choices
