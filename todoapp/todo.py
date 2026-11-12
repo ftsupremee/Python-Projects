@@ -41,7 +41,6 @@ def show_tasks(tasks: list):
         print("Your tasks are:")
         for task in tasks:
             print(task)
-        print()
         sleep(1)
     else:
         print("You have no tasks")
