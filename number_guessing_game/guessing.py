@@ -2,6 +2,7 @@
 import json
 import statistics
 from random import randint
+from math import log2
 
 file_path = "stats.json"
 
@@ -43,13 +44,19 @@ def show_stats(): # load stats from a json file and print
 
     numbers = []
     counts = []
+    accuracies = []
+
     for stat in data:
         number = stat["number"]
         count = stat["count"]
         minimum = stat["minimum"]
         maximum = stat["maximum"]
+        ideal_guess_count = log2(maximum - minimum + 1)
+        accuracy = (ideal_guess_count / count) if count < ideal_guess_count else 100
+
         numbers.append(number)
         counts.append(count)
+        accuracies.append(accuracy)
 
         print(f"Number: {number}, Count: {count}, Lower Bound: {minimum}, Higher Boud: {maximum}")
 
@@ -57,9 +64,17 @@ def show_stats(): # load stats from a json file and print
     most_common_number = statistics.multimode(numbers)
     most_common_guess_count = statistics.multimode(counts)
     average__guess_count = statistics.mean(counts)
+    average_accuracy = statistics.mean(accuracies)
+    median_guess_count = statistics.median(counts)
+    total_guesses = sum(counts)
+
+
     print(f"Most common number: {most_common_number}")
     print(f"Most common number of guesses: {most_common_guess_count}")
     print(f"Average guess count: {average__guess_count:.2f}")
+    print(f"Your average accuracy was {average_accuracy}")
+    print(f"Your median guess count was {median_guess_count}")
+    print(f"You took {total_guesses} total guesses.")
 
 def main():
     print("------------------------------")
