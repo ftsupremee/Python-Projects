@@ -58,7 +58,7 @@ def show_stats(): # load stats from a json file and print
         counts.append(count)
         accuracies.append(accuracy)
 
-        print(f"Number: {number}, Count: {count}, Lower Bound: {minimum}, Higher Boud: {maximum}")
+        print(f"Number: {number}, Count: {count}, Lower Bound: {minimum}, Higher Bound: {maximum}")
 
     # print useful stats
     most_common_number = statistics.multimode(numbers)
