@@ -13,7 +13,7 @@ def record_stats(number:int, guess_count: int, lower: int, higher: int): # recor
     except (FileNotFoundError, json.JSONDecodeError):
         data =[]
 
-    data.append({"number": number, "count": guess_count})
+    data.append({"number": number, "count": guess_count, "minimum": lower, "maximum": higher})
 
     with open(file_path, "w", encoding="UTF-8") as f:
         json.dump(data, f, indent=4) # rewrite the stats with the new game's stats
