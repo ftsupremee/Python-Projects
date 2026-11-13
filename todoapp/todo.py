@@ -82,7 +82,13 @@ def main():
 
     while True:
         tasks = load_tasks(path = path)
-        choice = int(input(f"\n{options}\nChoose what to do: "))
+        choice = (input(f"\n{options}\nChoose what to do: "))
+        # if the user enters a string, it raises a valueerror which stops the program so I added exception handling
+        try:
+            choice = int(choice)
+        except ValueError:
+            print("Please enter an integer")
+            continue
 
         # Allow only valid choices
         if not (1 <= choice <= choices_count):
