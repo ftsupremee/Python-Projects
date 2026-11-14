@@ -6,14 +6,17 @@ from math import log2
 
 file_path = "stats.json"
 
-def record_stats(number:int, guess_count: int, lower: int, higher: int): # record stats to a json file
+def record_stats(number:int, guess_count: int, minimum: int, maximum: int): # record stats to a json file
     try:
         with open(file_path, "r", encoding="UTF-8") as f:
             data = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         data =[]
 
-    data.append({"number": number, "count": guess_count, "minimum": lower, "maximum": higher})
+    ideal_guess_count = log2(maximum - minimum + 1)
+    accuracy = (ideal_guess_count / guess_count) if guess_count < ideal_guess_count else 100
+
+    data.append({"number": number, "count": guess_count, "minimum": minimum, "maximum": maximum, "accuracy": accuracy})
 
     with open(file_path, "w", encoding="UTF-8") as f:
         json.dump(data, f, indent=4) # rewrite the stats with the new game's stats
@@ -51,20 +54,20 @@ def show_stats(): # load stats from a json file and print
         count = stat["count"]
         minimum = stat["minimum"]
         maximum = stat["maximum"]
-        ideal_guess_count = log2(maximum - minimum + 1)
-        accuracy = (ideal_guess_count / count) if count < ideal_guess_count else 100
+        accuracy = stat["accuracy"]
 
         numbers.append(number)
         counts.append(count)
         accuracies.append(accuracy)
 
-        print(f"Number: {number}, Count: {count}, Lower Bound: {minimum}, Higher Bound: {maximum}")
+        print(f"Number: {number}, Count: {count}, Lower Bound: {minimum}, Higher Bound: {maximum}, Accuracy: {accuracy}")
 
     # print useful stats
     most_common_number = statistics.multimode(numbers)
     most_common_guess_count = statistics.multimode(counts)
     average__guess_count = statistics.mean(counts)
     average_accuracy = statistics.mean(accuracies)
+    median_accuracy = statistics.median(accuracies)
     median_guess_count = statistics.median(counts)
     total_guesses = sum(counts)
 
@@ -73,6 +76,7 @@ def show_stats(): # load stats from a json file and print
     print(f"Most common number of guesses: {most_common_guess_count}")
     print(f"Average guess count: {average__guess_count:.2f}")
     print(f"Your average accuracy was {average_accuracy}")
+    print(f"Your median accuracy was {median_accuracy}")
     print(f"Your median guess count was {median_guess_count}")
     print(f"You took {total_guesses} total guesses.")
 
@@ -81,7 +85,7 @@ def main():
     print("-----Number Guessing Game-----")
     print("------------------------------")
     while True:
-        choice = input("\n1.Play Guessing Game\n2.See Stats\nChoose what you want to do: ")
+        choice = input("\n1.Play Guessing Game\n2.See Stats\n3.Quit\nChoose what you want to do: ")
 
         # if the user enters a string, it raises a valueerror which stops the program so I added exception handling
         try:
@@ -90,7 +94,7 @@ def main():
             print("Please enter an integer")
             continue
 
-        if not 1 <= choice <= 2:
+        if not 1 <= choice <= 3:
             print("Invalid option.")
             continue
 
@@ -98,6 +102,9 @@ def main():
             guessing()
         elif choice == 2:
             show_stats()
+        else:
+            print("Thank you for playing")
+            break
 
 if __name__ == "__main__":
     main()
