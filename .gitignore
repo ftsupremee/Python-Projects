@@ -1,4 +1,6 @@
 projects.txt
+.venv
+.env
 
 todoapp/tasks.txt 
 number_guessing_game/stats.json
