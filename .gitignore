@@ -1,3 +1,5 @@
-todoapp/tasks.txt
 projects.txt
+
+todoapp/tasks.txt 
 number_guessing_game/stats.json
+password_manager/passwords.csv
