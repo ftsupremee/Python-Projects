@@ -1,7 +1,9 @@
 projects.txt
 .venv
 .env
+future
 
-todoapp/tasks.txt 
+todo_app/tasks.txt 
 number_guessing_game/stats.json
 password_manager/passwords.csv
+calculator/calculations.txt
