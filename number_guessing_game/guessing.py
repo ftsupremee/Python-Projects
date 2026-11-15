@@ -13,8 +13,12 @@ def record_stats(number:int, guess_count: int, minimum: int, maximum: int): # re
     except (FileNotFoundError, json.JSONDecodeError):
         data =[]
 
-    ideal_guess_count = log2(maximum - minimum + 1)
-    accuracy = (ideal_guess_count / guess_count) if guess_count < ideal_guess_count else 100
+    range = maximum - minimum + 1
+    ideal_guess_count = log2(range) if range > 1 else 1
+    try:
+        accuracy = min(100, (ideal_guess_count / guess_count) * 100) if guess_count > 0 else 0 
+    except ZeroDivisionError:
+        print("Can't divide by zero")
 
     data.append({"number": number, "count": guess_count, "minimum": minimum, "maximum": maximum, "accuracy": accuracy})
 
