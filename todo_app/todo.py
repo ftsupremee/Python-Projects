@@ -1,7 +1,7 @@
 from time import sleep
 
 # memory with a file with all the tasks that gets loaded every start
-def load_tasks(path: str="tasks.txt"):
+def load_tasks(path: str="tasks.txt") -> list:
     try:
         with open(path, "r") as f:
             tasks = [line.strip() for line in f if line.strip()]
@@ -10,20 +10,20 @@ def load_tasks(path: str="tasks.txt"):
         return []
 
 # save the tasks to the file, rewriting everything
-def save_tasks(tasks: list, path: str="tasks.txt"):
+def save_tasks(tasks: list, path: str="tasks.txt") -> None:
     with open(path, "w") as f:
         if len(tasks) == 0:
             return
         for task in tasks:
             f.write(task + "\n")
     
-def add_task(tasks: list):
+def add_task(tasks: list) -> None:
     task = input("Enter task you want to add: ")
     tasks.append(task)
     print("\nUpdated!")
     show_tasks(tasks)
 
-def remove_task(tasks: list):
+def remove_task(tasks: list) -> None:
     show_tasks(tasks)
     task_number = int(input("Please enter the index of the task: "))
 
@@ -38,7 +38,7 @@ def remove_task(tasks: list):
         print("Task index not in tasks.")
         sleep(1)
 
-def show_tasks(tasks: list):
+def show_tasks(tasks: list) -> None:
     if len(tasks) > 0: # If there are no tasks it's awkward so I made a thing for a special case
         print("Your tasks are:")
         for task in tasks:
@@ -48,11 +48,15 @@ def show_tasks(tasks: list):
         print("You have no tasks")
     save_tasks(tasks) # as show_tasks() is called in basically every choice
 
-def clear_tasks(tasks: list):
-    tasks.clear()
-    show_tasks(tasks)
+def clear_tasks(tasks: list) -> str:
+    choice = input("Do you want to clear ALL of the tasks (Y/n): ")
+    if choice == "Y":
+        tasks.clear()
+        show_tasks(tasks)
+        return "Successfully cleared"
+    return "Understood. Did not clear."
 
-def update_task(tasks: list):
+def update_task(tasks: list) -> None:
     show_tasks(tasks)
     task_number = int(input("Please enter the index of the task: "))
     task = input("Enter what to update it as: ")
