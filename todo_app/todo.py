@@ -49,7 +49,7 @@ def show_tasks(tasks: list):
     save_tasks(tasks) # as show_tasks() is called in basically every choice
 
 def clear_tasks(tasks: list):
-    tasks = [] # Setting a list to empty just removes all the tasks inside, clearing it
+    tasks.clear()
     show_tasks(tasks)
 
 def update_task(tasks: list):
