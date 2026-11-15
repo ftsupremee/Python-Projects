@@ -6,6 +6,14 @@ def store_calculation(calculation, path: str = "calculations.txt") -> None:
     with open(path, "a") as f:
         f.write("\n" + calculation)
 
+def clear_history() -> str:
+    choice = input("Do you want to clear ALL of the history (Y/n): ")
+    if choice == "Y":
+        with open("calculations.txt", "a") as f:
+            pass
+        return "Successfully cleared"
+    return "Understood. Did not clear."
+
 def calculate_expression() -> None:
     expression = input("Enter a math expression: ").replace("^", "**") # simple_eval doesn't accept ^
 
@@ -59,13 +67,15 @@ def main():
     print("-" * width)
 
     while True:
-        choice = int(input("\n1.Evaluate an expression\n2.See history\n3.Quit\nChoose: "))
+        choice = int(input("\n1.Evaluate an expression\n2.See history\n3.Clear History\n4.Quit\nChoose: "))
         match choice:
             case 1:
                 calculate_expression()
             case 2:
                 print(load_calculations())
             case 3:
+                print(clear_history())
+            case 4:
                 print("Thank you for using this calculator")
                 break
             case _:
