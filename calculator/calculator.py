@@ -38,8 +38,12 @@ def calculate_expression() -> None:
     store_calculation(calculation)
 
 def load_calculations(path: str = "calculations.txt", all: bool = True) -> list[str]:
-    with open(path, "r") as f:
-        text: list[str] = f.readlines()
+    try:
+        with open(path, "r") as f:
+            text: list[str] = f.readlines()
+    except FileNotFoundError as FnF:
+        print(f"{FnF} error occured. Try again with correct file name")
+
     text = [calculation.replace("\n", "") for calculation in text]
     if all:
         return text
