@@ -44,7 +44,8 @@ def display_weather(data: dict, choices: list) -> dict:
 def main():
     city = input("Enter the city you want to get weather out of: ")
     base_url = "https://api.openweathermap.org/data/2.5/weather"
-    params = {"q": city, "appid": api_key, "units": "metric"} # setting parameters for future api call
+    units = input("What units do you prefer?(metric/imperial): ")
+    params = {"q": city, "appid": api_key, "units": units} # setting parameters for future api call
 
     try:
         response = requests.get(base_url, params=params, timeout=15)
