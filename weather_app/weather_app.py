@@ -44,46 +44,40 @@ def display_weather(data: dict, choices: list) -> dict:
 def main():
     city = input("Enter the city you want to get weather out of: ")
     base_url = "https://api.openweathermap.org/data/2.5/weather"
-    params = {"q": city, "appid": api_key, "units": "metric"} # parameters for the request
+    params = {"q": city, "appid": api_key, "units": "metric"} # setting parameters for future api call
 
     try:
-        response = requests.get(base_url, params=params)
+        response = requests.get(base_url, params=params, timeout=15)
+        response.raise_for_status()          # raises HTTPError for bad status codes
         data = response.json()
 
-        if data["cod"] == 200:
-            options = ["Weather description", "Temperature", "Feels like", "Humidity",
-                       "Visibility", "Wind_speed", "Wind direction", "Cloudiness"]
-            choices = questionary.checkbox("What do you want to get?", options).ask()
-            weather = display_weather(data, choices)
-            for description, info in weather.items():
-                print(f"{description}: {info}")
+        # OpenWeather returns 200 even for bad cities — check the cod field
+        if str(data.get("cod")) != "200":
+            print(f"Error: {data.get('message', 'City not found')}")
+            return
 
-    except requests.exceptions.HTTPError as http_error:
-        match response.status_code:
-                case 400:
-                    print("Bad request") 
-                case 401:
-                    print("Unauthorized. Please check your API key") 
-                case 403:
-                    print("Forbidden") 
-                case 404:
-                    print("City not found") 
-                case 500:
-                    print("Internal Server Error") 
-                case 502:
-                    print("Bad Gateway.") 
-                case 504:
-                    print("Gatway Timeout")
-                case _:
-                    print("HTTP Error") 
+        options = ["Weather description", "Temperature", "Feels like", "Humidity",
+                   "Visibility", "Wind_speed", "Wind direction", "Cloudiness"]
+        choices = questionary.checkbox("What do you want to get?", choices=options).ask() # use questionary to take better CLI input for a checkbox
+
+        if not choices: # user didn't choose anything
+            print("No options selected.")
+            return
+
+        weather = display_weather(data, choices)
+        for description, info in weather.items():
+            print(f"{description}: {info}")
+
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP error: {e}")
     except requests.exceptions.ConnectionError:
-        print("Connection error \nPlease check your internet connection.")
+        print("Connection error. Check your internet.")
     except requests.exceptions.Timeout:
-        print("Request timed out \nPlease try again later.")
-    except requests.exceptions.TooManyRedirects:
-        print("Too many redirects \nPlease try again later.")
-    except requests.exceptions.RequestException as req_error:
-        print(f"Request Error: {req_error}")
+        print("Request timed out. Try again later.")
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+    except KeyError as e:
+        print(f"Unexpected response format (missing key {e})")
 
 if __name__ == "__main__":
     main()
