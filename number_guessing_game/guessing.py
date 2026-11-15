@@ -67,14 +67,17 @@ def show_stats(): # load stats from a json file and print
         print(f"Number: {number}, Count: {count}, Lower Bound: {minimum}, Higher Bound: {maximum}, Accuracy: {accuracy}")
 
     # print useful stats
-    most_common_number = statistics.multimode(numbers)
-    most_common_guess_count = statistics.multimode(counts)
-    average__guess_count = statistics.mean(counts)
-    average_accuracy = statistics.mean(accuracies)
-    median_accuracy = statistics.median(accuracies)
-    median_guess_count = statistics.median(counts)
+    try:
+        most_common_number = statistics.multimode(numbers)
+        most_common_guess_count = statistics.multimode(counts)
+        average__guess_count = statistics.mean(counts)
+        average_accuracy = statistics.mean(accuracies)
+        median_accuracy = statistics.median(accuracies)
+        median_guess_count = statistics.median(counts)
+    except statistics.StatisticsError:
+        print("Error. Please try again")
     total_guesses = sum(counts)
-
+    best_score = max(counts)
 
     print(f"Most common number: {most_common_number}")
     print(f"Most common number of guesses: {most_common_guess_count}")
@@ -83,6 +86,7 @@ def show_stats(): # load stats from a json file and print
     print(f"Your median accuracy was {median_accuracy}")
     print(f"Your median guess count was {median_guess_count}")
     print(f"You took {total_guesses} total guesses.")
+    print(f"Your best score was {best_score}")
 
 def main():
     print("------------------------------")
